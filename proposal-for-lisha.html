@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>For Lisha — A Special Question</title>
+  <style>
+    :root{
+      --bg:#fff6fa;
+      --accent:#ff4f8b;
+      --muted:#6b6b6b;
+    }
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: "Segoe UI", Roboto, system-ui, -apple-system, "Helvetica Neue", Arial;
+      background: radial-gradient(circle at 10% 10%, #fff0f6 0%, var(--bg) 40%), linear-gradient(180deg,#fff 0%, #fff6f8 100%);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      color:#2b2b2b;
+    }
+    .card{
+      width:960px;
+      max-width:96%;
+      background:linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.9));
+      border-radius:20px;
+      box-shadow: 0 12px 40px rgba(80,20,60,0.12);
+      overflow:hidden;
+      display:grid;
+      grid-template-columns: 1fr 380px;
+      gap:0;
+    }
+    @media (max-width:880px){ .card{grid-template-columns:1fr}}
+    .left{
+      padding:36px;
+      position:relative;
+    }
+    .title{font-size:28px; font-weight:700; color:var(--accent); margin:0 0 8px}
+    .sub{color:var(--muted); margin:0 0 18px}
+    .typewriter{
+      font-size:20px;
+      line-height:1.5;
+      min-height:84px;
+      margin-bottom:14px;
+    }
+    .photo{
+      width:100%;
+      height:220px;
+      border-radius:12px;
+      background: linear-gradient(135deg,#ffd6e5,#ffe9f3);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#fff;
+      font-weight:700;
+      font-size:18px;
+      overflow:hidden;
+      margin-bottom:16px;
+    }
+    .photo img{
+      width:100%;
+      height:100%;
+      object-fit:cover; /* keeps aspect, crops center */
+      display:block;
+    }
+    .photo .fallback{padding:14px;text-align:center;color:#6b0b3a}
+    .heart{ font-size:48px; color:var(--accent); display:inline-block; transform-origin:center; animation:beat 1.25s infinite; margin-bottom:12px; }
+    @keyframes beat{ 0%{transform:scale(1)} 50%{transform:scale(1.12)} 100%{transform:scale(1)} }
+    .question{ font-size:22px; font-weight:700; margin:6px 0 14px; }
+    .buttons{display:flex;gap:12px}
+    .btn{ padding:12px 18px; border-radius:10px; border:0; cursor:pointer; font-weight:700; box-shadow: 0 6px 18px rgba(240,80,140,0.08); }
+    .btn-yes{ background:linear-gradient(90deg,var(--accent),#ff7fb3); color:white }
+    .btn-no{ background:#fff; border:1px solid #ffd6e0; color:var(--accent) }
+    .right{ padding:28px; background:linear-gradient(180deg,#fff0f6, #fff6f9); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; }
+    .ring{ width:160px;height:160px;border-radius:50%; background:conic-gradient(from 180deg at 50% 50%, #fff, #ffe8f0); display:flex;align-items:center;justify-content:center; box-shadow: 0 10px 30px rgba(200,70,120,0.12); }
+    .result{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.92); flex-direction:column; gap:12px; transform:translateY(10px); opacity:0; pointer-events:none; transition:opacity .5s, transform .5s; text-align:center; padding:22px; }
+    .result.show{ opacity:1; transform:translateY(0); pointer-events:auto }
+    .result h1{ margin:0; color:var(--accent); font-size:34px }
+    .confetti{ position:fixed; left:0; right:0; top:0; bottom:0; pointer-events:none; overflow:hidden; }
+    footer{ font-size:13px; color:var(--muted); margin-top:10px }
+    small.badge{ display:inline-block; background:#fff; border-radius:999px; padding:6px 10px; border:1px solid #ffe0eb; color:#b1004f; font-weight:700 }
+  </style>
+</head>
+<body>
+  <div class="card" role="main" aria-labelledby="main-title">
+    <div class="left">
+      <div class="result" id="result">
+        <h1>She said YES, Lisha! 💍</h1>
+        <p>Forever starts today — I love you.</p>
+        <button class="btn btn-yes" id="replay">Celebrate Again</button>
+      </div>
+
+      <p class="title" id="main-title">For Lisha — A little surprise</p>
+      <p class="sub">Happy Valentine's Day — read this slowly, luv.</p>
+
+      <div class="typewriter" id="type"></div>
+
+      <div class="photo" id="photo">
+        <!-- Photo image: the <img> is ready to receive a URL or data URL -->
+        <img id="heroImg" src="" alt="A memory with Lisha" style="display:none" />
+        <div id="photoFallback" class="fallback">A memory with you ❤️ (replace this with your photo)</div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="heart">❤️</div>
+        <div>
+          <div class="question">Lisha — will you be mine?</div>
+          <div class="buttons">
+            <button class="btn btn-yes" id="yes">Yes, always</button>
+            <button class="btn btn-no" id="no">Not yet</button>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <small class="badge">Akhil → Lisha</small>
+        <div style="margin-top:8px">
+          <small id="foot">Tip: click Yes and watch the magic ✨</small>
+        </div>
+      </footer>
+    </div>
+
+    <div class="right" aria-hidden="true">
+      <h3>Will you be my forever?</h3>
+      <div class="ring" title="ring">
+        <svg width="90" height="90" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22 24c0-6 6-12 10-12s10 6 10 12-6 18-10 18-10-12-10-18z" fill="#fff4f8"/>
+          <path d="M32 8c2.7 0 5.7 3 7 6-1.2 3-4.3 6-7 6s-5.8-3-7-6c1.3-3 4.3-6 7-6z" fill="#fff"/>
+        </svg>
+      </div>
+      <p style="color:#8a0b4b;max-width:220px">I made this just for you — open your heart and say the word.</p>
+    </div>
+  </div>
+
+  <div class="confetti" id="confetti"></div>
+
+  <script>
+    // Typewriter text
+    const lines = [
+      "Hi Lisha —",
+      "Every time I think of you my world gets warmer.",
+      "Today I built something small just for us.",
+      "So here's the question..."
+    ];
+    const typeEl = document.getElementById('type');
+    let li = 0, ch = 0;
+    function typeLoop(){
+      if(li >= lines.length) return;
+      const line = lines[li];
+      typeEl.textContent = line.slice(0, ch);
+      ch++;
+      if(ch > line.length){
+        li++; ch = 0;
+        setTimeout(typeLoop, 700);
+      } else setTimeout(typeLoop, 36 + Math.random()*40);
+    }
+    setTimeout(typeLoop, 600);
+
+    // Confetti
+    function launchConfetti(count=70){
+      const confetti = document.getElementById('confetti');
+      const colors = ['#ff4f8b','#ffd6e5','#ffd27a','#77dd77','#ffd1ff','#ff7fb3'];
+      for(let i=0;i<count;i++){
+        const s = document.createElement('span');
+        s.textContent = ['🎉','💖','✨'][Math.floor(Math.random()*3)];
+        s.style.left = Math.random()*100 + 'vw';
+        s.style.top = (Math.random()*10 - 10) + 'vh';
+        s.style.fontSize = (12 + Math.random()*24) + 'px';
+        s.style.color = colors[Math.floor(Math.random()*colors.length)];
+        s.style.animationDuration = (3 + Math.random()*4).toFixed(2)+'s';
+        s.style.opacity = 0.95;
+        confetti.appendChild(s);
+        setTimeout(()=> s.remove(), 8000);
+      }
+    }
+
+    // Buttons logic
+    const yes = document.getElementById('yes');
+    const no = document.getElementById('no');
+    const result = document.getElementById('result');
+    const replay = document.getElementById('replay');
+
+    yes.addEventListener('click', ()=> {
+      result.classList.add('show');
+      launchConfetti(
